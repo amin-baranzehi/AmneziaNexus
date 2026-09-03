@@ -116,11 +116,20 @@ class LogService:
     def get_vpn_logs(lines: int = 100) -> str:
         """Get WireGuard kernel logs via dmesg."""
         try:
-            # Note: dmesg | grep wireguard/amneziawg might be needed, but we can just grab tail
-            p1 = subprocess.Popen(['sudo', 'dmesg'], stdout=subprocess.PIPE)
-            p2 = subprocess.Popen(['tail', '-n', str(lines)], stdin=p1.stdout, stdout=subprocess.PIPE, text=True)
-            p1.stdout.close()
-            output = p2.communicate()[0]
-            return output if output else "No recent kernel logs found."
+            result = subprocess.run(['sudo', 'dmesg'], capture_output=True, text=True)
+            if result.returncode != 0:
+                return "Error reading kernel logs."
+            
+            # Filter for VPN related logs
+            vpn_keywords = ['wireguard', 'amnezia', 'awg']
+            filtered_lines = []
+            for line in result.stdout.splitlines():
+                if any(keyword in line.lower() for keyword in vpn_keywords):
+                    filtered_lines.append(line)
+            
+            if not filtered_lines:
+                return "No recent VPN kernel logs found."
+                
+            return '\n'.join(filtered_lines[-lines:])
         except Exception as e:
             return f"Error reading VPN logs: {str(e)}"
