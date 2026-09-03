@@ -1,7 +1,42 @@
-body {
-    background-color: #1a1a1f; /* Dark background similar to v2rayA */
-    color: #e2e8f0;
+:root {
+    --bg-main: #1a1a1f;
+    --bg-panel: #24242b;
+    --text-main: #e2e8f0;
+    --text-muted: #9ca3af;
+    --border-color: #374151;
+    --row-hover: #2d2d35;
 }
+
+body.light-theme {
+    --bg-main: #f3f4f6;
+    --bg-panel: #ffffff;
+    --text-main: #1f2937;
+    --text-muted: #4b5563;
+    --border-color: #e5e7eb;
+    --row-hover: #f9fafb;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.bg-panel {
+    background-color: var(--bg-panel);
+    border-color: var(--border-color);
+}
+
+.table-row-hover:hover {
+    background-color: var(--row-hover);
+}
+
+/* Tailwind Overrides for Light Theme */
+body.light-theme .text-gray-400 { color: var(--text-muted); }
+body.light-theme .text-gray-200 { color: var(--text-main); }
+body.light-theme .bg-gray-800 { background-color: #f3f4f6; border-color: #e5e7eb; color: #1f2937; }
+body.light-theme .border-gray-700 { border-color: var(--border-color); }
+body.light-theme .divide-gray-700 > :not([hidden]) ~ :not([hidden]) { border-color: var(--border-color); }
 
 .table-row-hover:hover {
     background-color: #2d2d35;

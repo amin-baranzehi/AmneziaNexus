@@ -49,4 +49,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Theme Switcher Logic
+    const themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) {
+        // Load preference
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-theme');
+        }
+
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
+    }
 });
