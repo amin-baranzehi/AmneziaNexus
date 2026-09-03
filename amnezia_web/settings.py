@@ -131,3 +131,6 @@ MAILERS = {
 LOGIN_REDIRECT_URL = 'vpn_panel:dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
