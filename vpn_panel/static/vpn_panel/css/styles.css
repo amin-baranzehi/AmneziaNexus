@@ -1,81 +1,24 @@
-:root {
-    --bg-main: #1a1a1f;
-    --bg-panel: #24242b;
-    --text-main: #e2e8f0;
-    --text-muted: #9ca3af;
-    --border-color: #374151;
-    --row-hover: #2d2d35;
-}
-
-body.light-theme {
-    --bg-main: #f3f4f6;
-    --bg-panel: #ffffff;
-    --text-main: #1f2937;
-    --text-muted: #4b5563;
-    --border-color: #e5e7eb;
-    --row-hover: #f9fafb;
-}
-
 body {
-    background-color: var(--bg-main);
-    color: var(--text-main);
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.bg-panel {
-    background-color: var(--bg-panel);
-    border-color: var(--border-color);
-}
-
-.table-row-hover:hover {
-    background-color: var(--row-hover);
-}
-
-/* Tailwind Overrides for Light Theme */
-body.light-theme .text-gray-400 { color: var(--text-muted); }
-body.light-theme .text-gray-200, body.light-theme .text-gray-300 { color: var(--text-main); }
-body.light-theme .text-white { color: #111827; }
-body.light-theme .bg-gray-800 { background-color: #f3f4f6; border-color: #e5e7eb; color: #1f2937; }
-body.light-theme .bg-gray-800\/50 { background-color: #f9fafb; }
-body.light-theme .border-gray-700, body.light-theme .border-gray-800 { border-color: var(--border-color); }
-body.light-theme .divide-gray-700 > :not([hidden]) ~ :not([hidden]) { border-color: var(--border-color); }
-body.light-theme .hover\:bg-gray-700:hover { background-color: #e5e7eb; color: #111827; }
-
-/* Status Badges */
-body.light-theme .bg-green-900\/50 { background-color: #d1fae5; border-color: #a7f3d0; color: #065f46; }
-body.light-theme .text-green-400 { color: #059669; }
-body.light-theme .bg-green-500 { background-color: #10b981; }
-
-body.light-theme .bg-yellow-900\/50 { background-color: #fef3c7; border-color: #fde68a; color: #b45309; }
-body.light-theme .text-yellow-400 { color: #d97706; }
-
-body.light-theme .bg-red-900\/50 { background-color: #fee2e2; border-color: #fecaca; color: #b91c1c; }
-body.light-theme .text-red-400 { color: #ef4444; }
-
-/* Message Boxes */
-body.light-theme .bg-green-900\/30 { background-color: #d1fae5; }
-body.light-theme .text-green-300 { color: #065f46; }
-body.light-theme .border-green-500 { border-color: #10b981; }
-
-body.light-theme .bg-red-900\/30 { background-color: #fee2e2; }
-body.light-theme .text-red-300 { color: #991b1b; }
-body.light-theme .border-red-500 { border-color: #ef4444; }
-
-body.light-theme .bg-yellow-900\/30 { background-color: #fef3c7; }
-body.light-theme .text-yellow-300 { color: #92400e; }
-body.light-theme .border-yellow-500 { border-color: #f59e0b; }
-
-/* Buttons */
-body.light-theme .bg-accent { color: white !important; }
-body.light-theme .bg-indigo-600 { color: white !important; }
-
-.modal-active {
-    overflow-x: hidden;
-    overflow-y: hidden !important;
+    background-color: #1a1a1f; /* Dark background similar to v2rayA */
+    color: #e2e8f0;
 }
 
 .bg-panel {
     background-color: #24242b;
+    border-color: #374151;
+}
+
+.table-row-hover:hover {
+    background-color: #2d2d35;
+}
+
+.modal {
+    transition: opacity 0.25s ease;
+}
+
+.modal-active {
+    overflow-x: hidden;
+    overflow-y: hidden !important;
 }
 
 .text-accent {
@@ -84,6 +27,7 @@ body.light-theme .bg-indigo-600 { color: white !important; }
 
 .bg-accent {
     background-color: #8b5cf6;
+    color: white;
 }
 
 .bg-accent:hover {
