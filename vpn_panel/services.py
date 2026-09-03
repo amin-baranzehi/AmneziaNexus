@@ -9,10 +9,8 @@ class NetworkManager:
     def enable_routing(interface: str = 'awg0') -> bool:
         """Enable NAT masquerading and forward rules for the given interface."""
         try:
-            # Allow forwarding to and from the interface
             subprocess.run(['sudo', 'iptables', '-A', 'FORWARD', '-o', interface, '-j', 'ACCEPT'], check=False)
             subprocess.run(['sudo', 'iptables', '-A', 'FORWARD', '-i', interface, '-j', 'ACCEPT'], check=False)
-            # Setup NAT
             subprocess.run(['sudo', 'iptables', '-t', 'nat', '-A', 'POSTROUTING', '-o', interface, '-j', 'MASQUERADE'], check=False)
             return True
         except Exception:
@@ -98,3 +96,31 @@ class PingService:
             return "Timeout"
         except Exception:
             return "Error"
+
+class LogService:
+    """Service to read system and VPN logs."""
+    
+    @staticmethod
+    def get_system_logs(lines: int = 100) -> str:
+        """Get the panel's systemd journal logs."""
+        try:
+            result = subprocess.run(
+                ['sudo', 'journalctl', '-u', 'amnezia-panel', '-n', str(lines), '--no-pager'],
+                capture_output=True, text=True
+            )
+            return result.stdout if result.stdout else "No system logs found or panel is not running as a service."
+        except Exception as e:
+            return f"Error reading system logs: {str(e)}"
+
+    @staticmethod
+    def get_vpn_logs(lines: int = 100) -> str:
+        """Get WireGuard kernel logs via dmesg."""
+        try:
+            # Note: dmesg | grep wireguard/amneziawg might be needed, but we can just grab tail
+            p1 = subprocess.Popen(['sudo', 'dmesg'], stdout=subprocess.PIPE)
+            p2 = subprocess.Popen(['tail', '-n', str(lines)], stdin=p1.stdout, stdout=subprocess.PIPE, text=True)
+            p1.stdout.close()
+            output = p2.communicate()[0]
+            return output if output else "No recent kernel logs found."
+        except Exception as e:
+            return f"Error reading VPN logs: {str(e)}"

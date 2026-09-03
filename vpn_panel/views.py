@@ -1,12 +1,12 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.http import JsonResponse
 from .models import AmneziaConfig
 from .forms import AmneziaConfigForm
-from .services import VPNManager, PingService
+from .services import VPNManager, PingService, LogService
 
 class DashboardView(LoginRequiredMixin, ListView):
     """Main dashboard view displaying all configurations."""
@@ -114,3 +114,15 @@ class PingCheckView(LoginRequiredMixin, View):
         config.save(update_fields=['last_latency'])
         
         return JsonResponse({'latency': latency})
+
+class LogsView(LoginRequiredMixin, View):
+    """View to display system and VPN logs."""
+    
+    def get(self, request):
+        sys_logs = LogService.get_system_logs(200)
+        vpn_logs = LogService.get_vpn_logs(200)
+        return render(request, 'vpn_panel/logs.html', {
+            'sys_logs': sys_logs,
+            'vpn_logs': vpn_logs,
+            'is_system_connected': VPNManager.is_connected()
+        })

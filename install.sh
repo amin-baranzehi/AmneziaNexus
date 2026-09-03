@@ -29,6 +29,8 @@ www-data ALL=(ALL) NOPASSWD: /sbin/iptables -A FORWARD -o awg0 -j ACCEPT
 www-data ALL=(ALL) NOPASSWD: /sbin/iptables -A FORWARD -i awg0 -j ACCEPT
 www-data ALL=(ALL) NOPASSWD: /sbin/iptables -D FORWARD -o awg0 -j ACCEPT
 www-data ALL=(ALL) NOPASSWD: /sbin/iptables -D FORWARD -i awg0 -j ACCEPT
+www-data ALL=(ALL) NOPASSWD: /usr/bin/journalctl
+www-data ALL=(ALL) NOPASSWD: /usr/bin/dmesg
 EOF
 chmod 440 /etc/sudoers.d/amnezia-panel
 

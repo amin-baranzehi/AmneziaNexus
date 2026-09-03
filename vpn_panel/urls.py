@@ -10,4 +10,5 @@ urlpatterns = [
     path('config/<int:pk>/delete/', views.ConfigDeleteView.as_view(), name='config_delete'),
     path('config/<int:pk>/toggle/', views.ToggleConnectionView.as_view(), name='config_toggle'),
     path('config/<int:pk>/ping/', views.PingCheckView.as_view(), name='config_ping'),
+    path('logs/', views.LogsView.as_view(), name='logs'),
 ]

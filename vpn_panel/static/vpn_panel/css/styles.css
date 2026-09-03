@@ -12,6 +12,23 @@ body {
     background-color: #2d2d35;
 }
 
+/* Custom Scrollbar for Logs */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #1a1a1f;
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+}
+
 .modal {
     transition: opacity 0.25s ease;
 }
