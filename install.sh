@@ -10,7 +10,7 @@ echo "========================================="
 # 1. Update and install dependencies
 echo "[1/6] Installing system dependencies..."
 apt-get update
-apt-get install -y software-properties-common python3-venv python3-pip iptables wireguard-tools sudo curl
+apt-get install -y software-properties-common python3-venv python3-pip iptables wireguard-tools sudo curl build-essential
 
 # Install AmneziaWG if not already installed
 if ! command -v awg-quick &> /dev/null; then
