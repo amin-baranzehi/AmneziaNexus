@@ -52,6 +52,12 @@ class VPNManager:
             return False, "Permission Denied: Cannot write config file."
             
         result = subprocess.run(['sudo', 'awg-quick', 'up', 'awg0'], capture_output=True, text=True)
+        try:
+            with open('/tmp/awg_last.log', 'w') as f:
+                f.write(f"--- START CONNECTION ---\n{result.stdout}\n{result.stderr}\n")
+        except Exception:
+            pass
+            
         if result.returncode == 0:
             NetworkManager.enable_routing()
             return True, "Connected successfully."
@@ -61,6 +67,12 @@ class VPNManager:
     def stop_connection(cls) -> tuple[bool, str]:
         """Stop the VPN connection."""
         result = subprocess.run(['sudo', 'awg-quick', 'down', 'awg0'], capture_output=True, text=True)
+        try:
+            with open('/tmp/awg_last.log', 'a') as f:
+                f.write(f"--- STOP CONNECTION ---\n{result.stdout}\n{result.stderr}\n")
+        except Exception:
+            pass
+            
         NetworkManager.disable_routing()
         if result.returncode == 0:
             return True, "Disconnected successfully."
@@ -114,22 +126,14 @@ class LogService:
 
     @staticmethod
     def get_vpn_logs(lines: int = 100) -> str:
-        """Get WireGuard kernel logs via dmesg."""
+        """Get WireGuard / AmneziaWG connection logs."""
         try:
-            result = subprocess.run(['sudo', 'dmesg'], capture_output=True, text=True)
-            if result.returncode != 0:
-                return "Error reading kernel logs."
-            
-            # Filter for VPN related logs
-            vpn_keywords = ['wireguard', 'amnezia', 'awg']
-            filtered_lines = []
-            for line in result.stdout.splitlines():
-                if any(keyword in line.lower() for keyword in vpn_keywords):
-                    filtered_lines.append(line)
-            
-            if not filtered_lines:
-                return "No recent VPN kernel logs found."
-                
-            return '\n'.join(filtered_lines[-lines:])
+            with open('/tmp/awg_last.log', 'r') as f:
+                content = f.read()
+            if not content.strip():
+                return "No recent VPN connection logs found."
+            return content
+        except FileNotFoundError:
+            return "No VPN connection logs found yet. Try connecting a server."
         except Exception as e:
             return f"Error reading VPN logs: {str(e)}"
