@@ -46,6 +46,7 @@ su - www-data -s /bin/bash -c "cd $PROJ_DIR && source venv/bin/activate && pip i
 # 5. Database and Superuser setup
 echo "[5/6] Setting up database and Admin user..."
 su - www-data -s /bin/bash -c "cd $PROJ_DIR && source venv/bin/activate && python manage.py migrate"
+su - www-data -s /bin/bash -c "cd $PROJ_DIR && source venv/bin/activate && python manage.py collectstatic --noinput"
 
 # Create default superuser (admin / admin)
 su - www-data -s /bin/bash -c "cd $PROJ_DIR && source venv/bin/activate && export DJANGO_SUPERUSER_USERNAME=admin && export DJANGO_SUPERUSER_PASSWORD=admin && export DJANGO_SUPERUSER_EMAIL=admin@example.com && python manage.py createsuperuser --noinput" || echo "Admin user already exists or failed to create."

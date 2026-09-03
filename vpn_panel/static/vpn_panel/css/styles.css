@@ -1,0 +1,33 @@
+body {
+    background-color: #1a1a1f; /* Dark background similar to v2rayA */
+    color: #e2e8f0;
+}
+
+.table-row-hover:hover {
+    background-color: #2d2d35;
+}
+
+.modal {
+    transition: opacity 0.25s ease;
+}
+
+.modal-active {
+    overflow-x: hidden;
+    overflow-y: hidden !important;
+}
+
+.bg-panel {
+    background-color: #24242b;
+}
+
+.text-accent {
+    color: #8b5cf6; /* Purple accent */
+}
+
+.bg-accent {
+    background-color: #8b5cf6;
+}
+
+.bg-accent:hover {
+    background-color: #7c3aed;
+}
