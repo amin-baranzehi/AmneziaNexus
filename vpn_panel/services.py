@@ -70,10 +70,10 @@ class VPNManager:
 
     @staticmethod
     def is_connected() -> bool:
-        """Check if the interface is active."""
+        """Check if the interface exists."""
         try:
             result = subprocess.run(['ip', 'link', 'show', 'awg0'], capture_output=True, text=True, check=False)
-            return result.returncode == 0 and 'state UP' in result.stdout
+            return result.returncode == 0
         except Exception:
             return False
 
