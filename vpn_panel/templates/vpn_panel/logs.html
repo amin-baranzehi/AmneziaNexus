@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>System Logs - AmneziaNexus</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'vpn_panel/icons/app_icon.ico' %}">
+    <link rel="shortcut icon" href="{% static 'vpn_panel/icons/app_icon.ico' %}">
+    <link rel="apple-touch-icon" href="{% static 'vpn_panel/icons/app_icon.png' %}">
     <script src="{% static 'vpn_panel/js/tailwind.js' %}"></script>
     <link rel="stylesheet" href="{% static 'vpn_panel/css/inter.css' %}">
     <link rel="stylesheet" href="{% static 'vpn_panel/css/styles.css' %}">
@@ -20,7 +23,10 @@
             <div class="flex items-center justify-between h-14 sm:h-16">
                 <!-- Brand & Status -->
                 <div class="flex items-center space-x-2 sm:space-x-4">
-                    <a href="{% url 'vpn_panel:dashboard' %}" class="text-lg sm:text-2xl font-bold text-accent tracking-wider hover:opacity-90 transition">AmneziaNexus</a>
+                    <a href="{% url 'vpn_panel:dashboard' %}" class="flex items-center gap-2 sm:gap-2.5 text-lg sm:text-2xl font-bold text-accent tracking-wider hover:opacity-90 transition">
+                        <img src="{% static 'vpn_panel/icons/app_icon.png' %}" alt="Logo" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg object-contain shadow-sm">
+                        <span>AmneziaNexus</span>
+                    </a>
                     <div class="flex items-center">
                         <span class="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium {% if is_system_connected %}bg-emerald-950/70 text-emerald-400 border border-emerald-700/70{% else %}bg-gray-800/80 text-gray-400 border border-gray-700{% endif %}">
                             <span class="w-1.5 h-1.5 rounded-full {% if is_system_connected %}bg-emerald-400 animate-pulse{% else %}bg-gray-500{% endif %} mr-1.5"></span>

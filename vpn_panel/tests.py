@@ -61,3 +61,40 @@ class ResponsiveTemplateTests(TestCase):
         content = response.content.decode('utf-8')
         self.assertIn('Disconnect', content)
 
+    def test_dashboard_has_view_and_edit_modals_and_buttons(self):
+        self.client.login(username='testuser', password='password123')
+        response = self.client.get(reverse('vpn_panel:dashboard'))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode('utf-8')
+        
+        # Check buttons with icons
+        self.assertIn('view-config-btn', content)
+        self.assertIn('edit-config-btn', content)
+        
+        # Check modals
+        self.assertIn('view-config-modal', content)
+        self.assertIn('edit-config-modal', content)
+        self.assertIn('copy-config-btn', content)
+        self.assertIn('config-raw-' + str(self.config.id), content)
+
+    def test_config_edit_view_get(self):
+        self.client.login(username='testuser', password='password123')
+        response = self.client.get(reverse('vpn_panel:config_edit', args=[self.config.id]))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode('utf-8')
+        self.assertIn('Edit Server Profile', content)
+        self.assertIn('Frankfurt Pro', content)
+
+    def test_config_edit_view_post_updates_model(self):
+        self.client.login(username='testuser', password='password123')
+        new_content = '[Interface]\nPrivateKey = updated_key\n[Peer]\nEndpoint = 203.0.113.5:51820\nPublicKey = pub5\n'
+        response = self.client.post(reverse('vpn_panel:config_edit', args=[self.config.id]), {
+            'name': 'Amsterdam Updated',
+            'config_content': new_content
+        })
+        self.assertEqual(response.status_code, 302)
+        self.config.refresh_from_db()
+        self.assertEqual(self.config.name, 'Amsterdam Updated')
+        self.assertEqual(self.config.endpoint_ip, '203.0.113.5')
+
+

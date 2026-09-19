@@ -48,6 +48,7 @@ class ConfigUpdateView(LoginRequiredMixin, UpdateView):
     """View to update an existing VPN configuration."""
     model = AmneziaConfig
     form_class = AmneziaConfigForm
+    template_name = 'vpn_panel/config_form.html'
     success_url = reverse_lazy('vpn_panel:dashboard')
 
     def form_valid(self, form):
