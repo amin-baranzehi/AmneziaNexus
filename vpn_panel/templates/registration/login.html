@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Login - AmneziaNexus Control Panel</title>
     <script src="{% static 'vpn_panel/js/tailwind.js' %}"></script>
     <link rel="stylesheet" href="{% static 'vpn_panel/css/inter.css' %}">
@@ -12,55 +12,55 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="antialiased min-h-screen flex items-center justify-center bg-[#1a1a1f] text-gray-200">
+<body class="antialiased min-h-screen flex items-center justify-center bg-[#16161a] text-gray-200 p-3 sm:p-4">
 
-    <div class="bg-panel border border-gray-700 rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
+    <div class="bg-panel border border-gray-700/80 rounded-2xl shadow-2xl p-5 sm:p-8 max-w-sm sm:max-w-md w-full">
         
-        <div class="mb-8 text-center">
-            <h1 class="text-3xl font-bold text-accent tracking-wider">AmneziaNexus</h1>
-            <p class="text-sm text-gray-500 mt-2">Secure Router Management</p>
+        <div class="mb-6 sm:mb-8 text-center">
+            <h1 class="text-2xl sm:text-3xl font-bold text-accent tracking-wider">AmneziaNexus</h1>
+            <p class="text-xs sm:text-sm text-gray-400 mt-1 sm:mt-2">Secure Router Management</p>
         </div>
 
         {% if form.errors %}
-            <div class="mb-4 p-3 bg-red-900/30 border-l-4 border-red-500 text-red-300 text-sm rounded">
+            <div class="mb-4 p-3 bg-rose-950/40 border-l-4 border-rose-500 text-rose-300 text-xs sm:text-sm rounded-lg">
                 Your username and password didn't match. Please try again.
             </div>
         {% endif %}
 
         {% if next %}
             {% if user.is_authenticated %}
-                <div class="mb-4 p-3 bg-yellow-900/30 border-l-4 border-yellow-500 text-yellow-300 text-sm rounded">
+                <div class="mb-4 p-3 bg-amber-950/40 border-l-4 border-amber-500 text-amber-300 text-xs sm:text-sm rounded-lg">
                     Your account doesn't have access to this page. To proceed, please login with an account that has access.
                 </div>
             {% else %}
-                <div class="mb-4 p-3 bg-blue-900/30 border-l-4 border-blue-500 text-blue-300 text-sm rounded">
+                <div class="mb-4 p-3 bg-indigo-950/40 border-l-4 border-indigo-500 text-indigo-300 text-xs sm:text-sm rounded-lg">
                     Please login to see this page.
                 </div>
             {% endif %}
         {% endif %}
 
-        <form method="post" action="{% url 'login' %}">
+        <form method="post" action="{% url 'login' %}" class="space-y-4 sm:space-y-5">
             {% csrf_token %}
             
-            <div class="mb-4">
-                <label for="id_username" class="block text-sm font-medium text-gray-400 mb-2">Username</label>
-                <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username" class="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:border-indigo-500">
+            <div>
+                <label for="id_username" class="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5">Username</label>
+                <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username" class="w-full px-3.5 py-2.5 bg-gray-800/90 border border-gray-700 rounded-lg text-white text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150">
             </div>
 
-            <div class="mb-6">
-                <label for="id_password" class="block text-sm font-medium text-gray-400 mb-2">Password</label>
-                <input type="password" name="password" autocomplete="current-password" required id="id_password" class="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:border-indigo-500">
+            <div>
+                <label for="id_password" class="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5">Password</label>
+                <input type="password" name="password" autocomplete="current-password" required id="id_password" class="w-full px-3.5 py-2.5 bg-gray-800/90 border border-gray-700 rounded-lg text-white text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150">
             </div>
             
-            <button type="submit" class="w-full py-2 bg-accent hover:opacity-90 text-white font-medium rounded-md shadow-sm transition duration-200">
+            <button type="submit" class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 active:scale-[0.99] text-white text-sm sm:text-base font-medium rounded-lg shadow-sm transition duration-150">
                 Login
             </button>
             <input type="hidden" name="next" value="{{ next }}">
         </form>
 
         <!-- Footer -->
-        <div class="mt-8 text-center text-sm text-gray-500">
-            <p>Developed by <a href="https://github.com/amin-baranzehi" target="_blank" class="text-accent hover:underline font-medium">Amin Baranzehi</a></p>
+        <div class="mt-6 sm:mt-8 text-center text-xs text-gray-500">
+            <p>Developed by <a href="https://github.com/amin-baranzehi" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline font-medium">Amin Baranzehi</a></p>
         </div>
 
     </div>

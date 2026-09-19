@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>AmneziaNexus Control Panel</title>
     <script src="{% static 'vpn_panel/js/tailwind.js' %}"></script>
     <link rel="stylesheet" href="{% static 'vpn_panel/css/inter.css' %}">
@@ -15,25 +15,31 @@
 <body class="antialiased min-h-screen flex flex-col">
 
     <!-- Top Navbar -->
-    <nav class="bg-panel border-b border-gray-700 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center space-x-4">
-                    <h1 class="text-2xl font-bold text-accent tracking-wider">AmneziaNexus</h1>
-                    <div class="hidden md:flex space-x-2">
-                        <span class="px-3 py-1 rounded-md text-sm font-medium {% if is_system_connected %}bg-green-900/50 text-green-400 border border-green-700{% else %}bg-gray-800 text-gray-400 border border-gray-700{% endif %}">
-                            {% if is_system_connected %}Running{% else %}Stopped{% endif %}
+    <nav class="bg-panel border-b border-gray-700/80 shadow-sm sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14 sm:h-16">
+                <!-- Left: Brand & Status -->
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <a href="{% url 'vpn_panel:dashboard' %}" class="text-lg sm:text-2xl font-bold text-accent tracking-wider hover:opacity-90 transition">AmneziaNexus</a>
+                    <div class="flex items-center">
+                        <span class="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium {% if is_system_connected %}bg-emerald-950/70 text-emerald-400 border border-emerald-700/70{% else %}bg-gray-800/80 text-gray-400 border border-gray-700{% endif %}">
+                            <span class="w-1.5 h-1.5 rounded-full {% if is_system_connected %}bg-emerald-400 animate-pulse{% else %}bg-gray-500{% endif %} mr-1.5"></span>
+                            <span>{% if is_system_connected %}Running{% else %}Stopped{% endif %}</span>
                         </span>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <a href="{% url 'vpn_panel:logs' %}" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-medium rounded-md transition duration-200 border border-gray-700">
-                        Logs
+
+                <!-- Right: Navigation actions -->
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <a href="{% url 'vpn_panel:logs' %}" class="inline-flex items-center px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-gray-800/90 hover:bg-gray-700 text-gray-300 text-xs sm:text-sm font-medium rounded-lg transition duration-150 border border-gray-700" title="System Logs">
+                        <svg class="w-4 h-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span class="hidden sm:inline">Logs</span>
                     </a>
                     <form action="{% url 'logout' %}" method="post" class="inline">
                         {% csrf_token %}
-                        <button type="submit" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-medium rounded-md transition duration-200 border border-gray-700">
-                            Logout
+                        <button type="submit" class="inline-flex items-center px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-gray-800/90 hover:bg-gray-700 text-gray-300 text-xs sm:text-sm font-medium rounded-lg transition duration-150 border border-gray-700" title="Sign Out">
+                            <svg class="w-4 h-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                            <span class="hidden sm:inline">Logout</span>
                         </button>
                     </form>
                 </div>
@@ -42,13 +48,13 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="flex-grow max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 w-full">
+    <main class="flex-grow max-w-7xl mx-auto py-5 sm:py-8 px-3 sm:px-6 lg:px-8 w-full">
         
         <!-- Messages -->
         {% if messages %}
-            <div class="mb-6 space-y-2">
+            <div class="mb-4 sm:mb-6 space-y-2">
                 {% for message in messages %}
-                    <div class="p-4 rounded-md shadow-sm border-l-4 {% if message.tags == 'success' %}bg-green-900/30 border-green-500 text-green-300{% elif message.tags == 'error' %}bg-red-900/30 border-red-500 text-red-300{% else %}bg-yellow-900/30 border-yellow-500 text-yellow-300{% endif %}">
+                    <div class="p-3 sm:p-4 rounded-lg shadow-sm border-l-4 text-xs sm:text-sm {% if message.tags == 'success' %}bg-emerald-950/30 border-emerald-500 text-emerald-300{% elif message.tags == 'error' %}bg-rose-950/30 border-rose-500 text-rose-300{% else %}bg-amber-950/30 border-amber-500 text-amber-300{% endif %}">
                         {{ message }}
                     </div>
                 {% endfor %}
@@ -56,91 +62,176 @@
         {% endif %}
 
         {% if system_warning %}
-            <div class="mb-6 p-4 rounded-md shadow-sm border-l-4 bg-yellow-900/30 border-yellow-500 text-yellow-300">
+            <div class="mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg shadow-sm border-l-4 bg-amber-950/30 border-amber-500 text-amber-300 text-xs sm:text-sm">
                 {{ system_warning }}
             </div>
         {% endif %}
 
         <!-- Servers Header -->
-        <div class="flex justify-between items-center mb-6">
-            <div class="flex space-x-2">
-                <h2 class="text-xl font-semibold text-gray-200">Server Profiles</h2>
+        <div class="flex justify-between items-center mb-4 sm:mb-6">
+            <div>
+                <h2 class="text-lg sm:text-xl font-bold text-gray-100">Server Profiles</h2>
+                <p class="text-xs sm:text-sm text-gray-400 mt-0.5">Manage your AmneziaWG connections</p>
             </div>
-            <div class="flex space-x-2">
-                <button class="modal-open px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md shadow-sm flex items-center transition">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    Create
+            <div>
+                <button class="modal-open px-3 sm:px-4 py-2 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white text-xs sm:text-sm font-medium rounded-lg shadow-sm flex items-center transition duration-150">
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span>Create</span>
                 </button>
             </div>
         </div>
 
-        <!-- Servers Table -->
-        <div class="bg-panel rounded-lg shadow overflow-hidden border border-gray-700">
-            <table class="min-w-full divide-y divide-gray-700">
-                <thead class="bg-gray-800/50">
+        <!-- MOBILE VIEW: Cards layout for small screens (< md) -->
+        <div class="block md:hidden space-y-3">
+            {% for config in configs %}
+            <div class="bg-panel border border-gray-700/80 rounded-xl p-4 shadow-sm server-card">
+                <!-- Top Row: Server Name, Status & Latency -->
+                <div class="flex items-start justify-between gap-2 mb-3">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2">
+                            {% if config.is_active %}
+                                <span class="relative flex h-2.5 w-2.5 flex-shrink-0">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                                </span>
+                            {% else %}
+                                <span class="inline-flex h-2.5 w-2.5 rounded-full bg-gray-600 flex-shrink-0"></span>
+                            {% endif %}
+                            <h3 class="text-sm sm:text-base font-semibold text-gray-100 truncate">{{ config.name }}</h3>
+                        </div>
+                        <p class="text-xs text-gray-400 font-mono mt-1 break-all flex items-center gap-1">
+                            <svg class="w-3 h-3 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                            <span>{{ config.endpoint_ip|default:"No endpoint" }}</span>
+                        </p>
+                    </div>
+
+                    <!-- Latency Badge + Ping Button -->
+                    <div class="flex items-center space-x-1 bg-gray-800/80 px-2.5 py-1 rounded-lg border border-gray-700/70 flex-shrink-0">
+                        <span class="latency-{{ config.id }} text-xs font-mono text-gray-300 font-medium">{{ config.last_latency }}</span>
+                        <button class="ping-btn p-1 text-gray-400 hover:text-indigo-400 focus:outline-none transition" data-id="{{ config.id }}" title="Test Ping">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bottom Row: Action Buttons -->
+                <div class="flex items-center gap-2 pt-2 border-t border-gray-700/60">
+                    <!-- Toggle Connect/Disconnect -->
+                    <form action="{% url 'vpn_panel:config_toggle' config.id %}" method="POST" class="flex-1">
+                        {% csrf_token %}
+                        {% if config.is_active %}
+                            <input type="hidden" name="action" value="stop">
+                            <button type="submit" class="w-full py-2 px-3 bg-amber-950/40 text-amber-300 hover:bg-amber-900/60 border border-amber-800/60 rounded-lg text-xs font-medium transition flex items-center justify-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Disconnect
+                            </button>
+                        {% else %}
+                            <input type="hidden" name="action" value="start">
+                            <button type="submit" class="w-full py-2 px-3 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/60 border border-emerald-800/60 rounded-lg text-xs font-medium transition flex items-center justify-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                Connect
+                            </button>
+                        {% endif %}
+                    </form>
+
+                    <!-- Delete -->
+                    <form action="{% url 'vpn_panel:config_delete' config.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete this server profile?');">
+                        {% csrf_token %}
+                        <button type="submit" class="py-2 px-3 bg-rose-950/40 text-rose-300 hover:bg-rose-900/60 border border-rose-800/60 rounded-lg text-xs font-medium transition flex items-center justify-center gap-1" title="Delete Profile">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            <span class="hidden xs:inline">Delete</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+            <div class="bg-panel rounded-xl border border-gray-700/80 p-6 text-center text-gray-400">
+                <svg class="w-10 h-10 mx-auto text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                <p class="text-sm font-medium text-gray-300">No servers added yet</p>
+                <p class="text-xs text-gray-500 mt-1">Tap 'Create' to add your first AmneziaWG configuration.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- DESKTOP & TABLET VIEW: Scrollable Table layout (>= md) -->
+        <div class="hidden md:block bg-panel rounded-xl shadow-sm border border-gray-700/80 overflow-x-auto custom-scrollbar">
+            <table class="min-w-full divide-y divide-gray-700/80 text-left">
+                <thead class="bg-gray-800/60">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Server Name</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Endpoint</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Latency</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Operations</th>
+                        <th scope="col" class="px-5 lg:px-6 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-5 lg:px-6 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Server Name</th>
+                        <th scope="col" class="px-5 lg:px-6 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Endpoint</th>
+                        <th scope="col" class="px-5 lg:px-6 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Latency</th>
+                        <th scope="col" class="px-5 lg:px-6 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider text-right">Operations</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-700 bg-panel">
+                <tbody class="divide-y divide-gray-700/60 bg-panel">
                     {% for config in configs %}
                     <tr class="table-row-hover transition duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <!-- Status -->
+                        <td class="px-5 lg:px-6 py-4 whitespace-nowrap">
                             {% if config.is_active %}
-                                <span class="text-green-400 flex items-center">
-                                    <span class="animate-pulse absolute inline-flex h-3 w-3 rounded-full bg-green-400 opacity-75 mr-1"></span>
-                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500 mr-2"></span>
+                                <span class="text-emerald-400 inline-flex items-center text-xs sm:text-sm font-medium">
+                                    <span class="relative flex h-2.5 w-2.5 mr-2">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                                    </span>
                                     Active
                                 </span>
                             {% else %}
-                                <span class="text-gray-500 flex items-center">
-                                    <span class="inline-flex rounded-full h-3 w-3 bg-gray-600 mr-2"></span>
+                                <span class="text-gray-400 inline-flex items-center text-xs sm:text-sm">
+                                    <span class="inline-flex rounded-full h-2.5 w-2.5 bg-gray-600 mr-2"></span>
                                     Inactive
                                 </span>
                             {% endif %}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200">
+
+                        <!-- Name -->
+                        <td class="px-5 lg:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-100">
                             {{ config.name }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-mono">
+
+                        <!-- Endpoint -->
+                        <td class="px-5 lg:px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-mono">
                             {{ config.endpoint_ip|default:"-" }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+
+                        <!-- Latency -->
+                        <td class="px-5 lg:px-6 py-4 whitespace-nowrap text-sm">
                             <div class="flex items-center space-x-2">
-                                <span id="latency-{{ config.id }}" class="text-gray-400 font-mono">{{ config.last_latency }}</span>
-                                <button class="ping-btn text-gray-500 hover:text-indigo-400" data-id="{{ config.id }}" title="Test Ping">
+                                <span id="latency-{{ config.id }}" class="latency-{{ config.id }} text-gray-300 font-mono text-xs sm:text-sm">{{ config.last_latency }}</span>
+                                <button class="ping-btn text-gray-400 hover:text-indigo-400 transition focus:outline-none" data-id="{{ config.id }}" title="Test Ping">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                 </button>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400 space-x-2 flex">
+
+                        <!-- Operations -->
+                        <td class="px-5 lg:px-6 py-4 whitespace-nowrap text-sm text-right space-x-2">
                             <!-- Toggle Button -->
                             <form action="{% url 'vpn_panel:config_toggle' config.id %}" method="POST" class="inline">
                                 {% csrf_token %}
                                 {% if config.is_active %}
                                     <input type="hidden" name="action" value="stop">
-                                    <button type="submit" class="px-3 py-1 bg-yellow-900/50 text-yellow-400 hover:bg-yellow-900/80 rounded border border-yellow-800 transition mr-2">Disconnect</button>
+                                    <button type="submit" class="px-3 py-1.5 bg-amber-950/40 text-amber-300 hover:bg-amber-900/60 rounded-lg border border-amber-800/60 transition text-xs font-medium">Disconnect</button>
                                 {% else %}
                                     <input type="hidden" name="action" value="start">
-                                    <button type="submit" class="px-3 py-1 bg-green-900/50 text-green-400 hover:bg-green-900/80 rounded border border-green-800 transition mr-2">Connect</button>
+                                    <button type="submit" class="px-3 py-1.5 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/60 rounded-lg border border-emerald-800/60 transition text-xs font-medium">Connect</button>
                                 {% endif %}
                             </form>
                             
                             <!-- Delete Button -->
-                            <form action="{% url 'vpn_panel:config_delete' config.id %}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this server?');">
+                            <form action="{% url 'vpn_panel:config_delete' config.id %}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this server profile?');">
                                 {% csrf_token %}
-                                <button type="submit" class="px-3 py-1 bg-red-900/50 text-red-400 hover:bg-red-900/80 rounded border border-red-800 transition">Delete</button>
+                                <button type="submit" class="px-3 py-1.5 bg-rose-950/40 text-rose-300 hover:bg-rose-900/60 rounded-lg border border-rose-800/60 transition text-xs font-medium">Delete</button>
                             </form>
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="5" class="px-6 py-10 text-center text-gray-500">
-                            No servers added yet. Click 'Create' to add your first AmneziaWG configuration.
+                        <td colspan="5" class="px-6 py-12 text-center text-gray-400">
+                            <p class="text-sm font-medium text-gray-300">No servers added yet</p>
+                            <p class="text-xs text-gray-500 mt-1">Click 'Create' to add your first AmneziaWG configuration.</p>
                         </td>
                     </tr>
                     {% endfor %}
@@ -150,45 +241,51 @@
     </main>
 
     <!-- Footer -->
-    <footer class="py-6 border-t border-gray-800 bg-panel mt-auto">
-        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500">
-            Developed by <a href="https://github.com/amin-baranzehi" target="_blank" class="text-accent hover:underline font-medium">Amin Baranzehi</a>
+    <footer class="py-4 sm:py-6 border-t border-gray-800/80 bg-panel mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs sm:text-sm text-gray-500">
+            Developed by <a href="https://github.com/amin-baranzehi" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline font-medium">Amin Baranzehi</a>
         </div>
     </footer>
 
-    <!-- Create Modal -->
-    <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50">
-        <div class="modal-overlay absolute w-full h-full bg-black opacity-60 modal-close"></div>
+    <!-- Create Modal (Fully responsive dialog) -->
+    <div class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50 p-3 sm:p-4">
+        <!-- Backdrop -->
+        <div class="modal-overlay absolute inset-0 bg-black/75 backdrop-blur-sm modal-close"></div>
         
-        <div class="modal-container bg-panel w-11/12 md:max-w-2xl mx-auto rounded-lg shadow-xl z-50 overflow-y-auto border border-gray-700">
-            <div class="modal-content py-6 text-left px-8">
-                <div class="flex justify-between items-center pb-3 border-b border-gray-700 mb-4">
-                    <p class="text-xl font-bold text-gray-200">Add New Server</p>
-                    <button class="modal-close cursor-pointer z-50 text-gray-400 hover:text-white">
-                        <svg class="fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path></svg>
-                    </button>
-                </div>
+        <!-- Modal Card -->
+        <div class="modal-container bg-panel w-full max-w-lg md:max-w-xl mx-auto rounded-xl shadow-2xl z-50 flex flex-col max-h-[90vh] border border-gray-700 overflow-hidden">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center px-4 sm:px-6 py-3.5 sm:py-4 border-b border-gray-700 bg-gray-800/40">
+                <p class="text-base sm:text-lg font-bold text-gray-100">Add New Server</p>
+                <button class="modal-close cursor-pointer p-1 text-gray-400 hover:text-white rounded-lg transition focus:outline-none" title="Close">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
 
-                <form action="{% url 'vpn_panel:config_add' %}" method="POST">
-                    {% csrf_token %}
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-400 mb-2">Profile Name</label>
+            <!-- Modal Body (Scrollable if height exceeds screen) -->
+            <form action="{% url 'vpn_panel:config_add' %}" method="POST" class="flex flex-col flex-1 overflow-hidden">
+                {% csrf_token %}
+                <div class="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex-1 space-y-4">
+                    <div>
+                        <label class="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5">Profile Name</label>
                         {{ form.name }}
                     </div>
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-400 mb-2">Configuration (.conf)</label>
+                    <div>
+                        <label class="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5">Configuration (.conf)</label>
                         {{ form.config_content }}
                     </div>
-                    
-                    <div class="flex justify-end pt-2">
-                        <button type="button" class="modal-close px-4 bg-transparent p-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white mr-2">Cancel</button>
-                        <button type="submit" class="px-6 py-2 bg-accent hover:opacity-90 text-white font-medium rounded-lg shadow-sm">Save Server</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                
+                <!-- Modal Footer -->
+                <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 sm:gap-3 px-4 sm:px-6 py-3.5 border-t border-gray-700 bg-gray-800/30">
+                    <button type="button" class="modal-close w-full sm:w-auto px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white border border-gray-700 transition">Cancel</button>
+                    <button type="submit" class="w-full sm:w-auto px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-medium rounded-lg shadow-sm transition">Save Server</button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script src="{% static 'vpn_panel/js/main.js' %}"></script>
 </body>
 </html>
+

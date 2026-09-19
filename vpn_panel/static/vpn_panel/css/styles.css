@@ -1,41 +1,51 @@
 body {
-    background-color: #1a1a1f; /* Dark background similar to v2rayA */
+    background-color: #16161a;
     color: #e2e8f0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .bg-panel {
-    background-color: #24242b;
-    border-color: #374151;
+    background-color: #202026;
+    border-color: #2e2e38;
+}
+
+.bg-card {
+    background-color: #1c1c22;
 }
 
 .table-row-hover:hover {
-    background-color: #2d2d35;
+    background-color: #262630;
 }
 
-/* Custom Scrollbar for Logs */
+/* Custom Scrollbar for Tables & Logs */
 .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
+}
+@media (min-width: 640px) {
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: #1a1a1f;
+    background: #16161a;
     border-radius: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #4b5563;
+    background: #3f3f4e;
     border-radius: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #6b7280;
+    background: #56566c;
 }
 
 .modal {
-    transition: opacity 0.25s ease;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
 .modal-active {
-    overflow-x: hidden;
-    overflow-y: hidden !important;
+    overflow: hidden !important;
 }
 
 .text-accent {
@@ -50,3 +60,20 @@ body {
 .bg-accent:hover {
     background-color: #7c3aed;
 }
+
+/* Server profile card for mobile */
+.server-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.server-card:active {
+    transform: scale(0.995);
+}
+
+/* Prevent iOS input zoom by keeping font-size >= 16px on small screens */
+@media (max-width: 639px) {
+    input, textarea, select {
+        font-size: 16px !important;
+    }
+}
+

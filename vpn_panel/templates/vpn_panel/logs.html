@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>System Logs - AmneziaNexus</title>
     <script src="{% static 'vpn_panel/js/tailwind.js' %}"></script>
     <link rel="stylesheet" href="{% static 'vpn_panel/css/inter.css' %}">
@@ -15,25 +15,31 @@
 <body class="antialiased min-h-screen flex flex-col">
 
     <!-- Top Navbar -->
-    <nav class="bg-panel border-b border-gray-700 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center space-x-4">
-                    <a href="{% url 'vpn_panel:dashboard' %}" class="text-2xl font-bold text-accent tracking-wider hover:opacity-80 transition">AmneziaNexus</a>
-                    <div class="hidden md:flex space-x-2">
-                        <span class="px-3 py-1 rounded-md text-sm font-medium {% if is_system_connected %}bg-green-900/50 text-green-400 border border-green-700{% else %}bg-gray-800 text-gray-400 border border-gray-700{% endif %}">
-                            {% if is_system_connected %}Running{% else %}Stopped{% endif %}
+    <nav class="bg-panel border-b border-gray-700/80 shadow-sm sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14 sm:h-16">
+                <!-- Brand & Status -->
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <a href="{% url 'vpn_panel:dashboard' %}" class="text-lg sm:text-2xl font-bold text-accent tracking-wider hover:opacity-90 transition">AmneziaNexus</a>
+                    <div class="flex items-center">
+                        <span class="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium {% if is_system_connected %}bg-emerald-950/70 text-emerald-400 border border-emerald-700/70{% else %}bg-gray-800/80 text-gray-400 border border-gray-700{% endif %}">
+                            <span class="w-1.5 h-1.5 rounded-full {% if is_system_connected %}bg-emerald-400 animate-pulse{% else %}bg-gray-500{% endif %} mr-1.5"></span>
+                            <span>{% if is_system_connected %}Running{% else %}Stopped{% endif %}</span>
                         </span>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <a href="{% url 'vpn_panel:dashboard' %}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition duration-200">
-                        Back to Dashboard
+
+                <!-- Right Actions -->
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <a href="{% url 'vpn_panel:dashboard' %}" class="inline-flex items-center px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-medium rounded-lg transition duration-150 shadow-sm">
+                        <svg class="w-4 h-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        <span><span class="hidden sm:inline">Back to </span>Dashboard</span>
                     </a>
                     <form action="{% url 'logout' %}" method="post" class="inline">
                         {% csrf_token %}
-                        <button type="submit" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-medium rounded-md transition duration-200 border border-gray-700">
-                            Logout
+                        <button type="submit" class="inline-flex items-center px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-gray-800/90 hover:bg-gray-700 text-gray-300 text-xs sm:text-sm font-medium rounded-lg transition duration-150 border border-gray-700" title="Sign Out">
+                            <svg class="w-4 h-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                            <span class="hidden sm:inline">Logout</span>
                         </button>
                     </form>
                 </div>
@@ -42,27 +48,43 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8">
         
-        <div class="mb-8">
-            <h2 class="text-xl font-semibold text-gray-200 mb-4">VPN Connection Logs (awg-quick)</h2>
-            <div id="vpn-logs-container" class="bg-black p-4 rounded-md border border-gray-700 overflow-x-auto shadow-inner custom-scrollbar" style="max-height: 400px; overflow-y: auto;">
-                <pre class="text-green-400 text-sm font-mono whitespace-pre-wrap">{{ vpn_logs }}</pre>
+        <!-- VPN Logs Section -->
+        <div class="mb-6 sm:mb-8">
+            <div class="flex items-center justify-between mb-2 sm:mb-3">
+                <h2 class="text-base sm:text-lg font-bold text-gray-100 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    VPN Connection Logs <span class="text-xs text-gray-400 font-mono font-normal">(awg-quick)</span>
+                </h2>
+                <button onclick="window.location.reload();" class="text-xs text-gray-400 hover:text-indigo-400 flex items-center gap-1 transition">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    <span>Refresh</span>
+                </button>
+            </div>
+            <div id="vpn-logs-container" class="bg-black/90 p-3 sm:p-4 rounded-xl border border-gray-700/80 overflow-x-auto shadow-inner custom-scrollbar" style="max-height: 340px; overflow-y: auto;">
+                <pre class="text-emerald-400 text-xs sm:text-sm font-mono whitespace-pre-wrap break-all sm:break-normal">{{ vpn_logs }}</pre>
             </div>
         </div>
 
-        <div class="mb-8">
-            <h2 class="text-xl font-semibold text-gray-200 mb-4">Panel Service Logs (journalctl)</h2>
-            <div id="sys-logs-container" class="bg-black p-4 rounded-md border border-gray-700 overflow-x-auto shadow-inner custom-scrollbar" style="max-height: 400px; overflow-y: auto;">
-                <pre class="text-gray-300 text-sm font-mono whitespace-pre-wrap">{{ sys_logs }}</pre>
+        <!-- System Logs Section -->
+        <div class="mb-6 sm:mb-8">
+            <div class="flex items-center justify-between mb-2 sm:mb-3">
+                <h2 class="text-base sm:text-lg font-bold text-gray-100 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+                    Panel Service Logs <span class="text-xs text-gray-400 font-mono font-normal">(journalctl)</span>
+                </h2>
+            </div>
+            <div id="sys-logs-container" class="bg-black/90 p-3 sm:p-4 rounded-xl border border-gray-700/80 overflow-x-auto shadow-inner custom-scrollbar" style="max-height: 340px; overflow-y: auto;">
+                <pre class="text-gray-300 text-xs sm:text-sm font-mono whitespace-pre-wrap break-all sm:break-normal">{{ sys_logs }}</pre>
             </div>
         </div>
 
     </main>
 
     <!-- Footer -->
-    <footer class="mt-auto py-6 text-center text-gray-500 text-sm border-t border-gray-800">
-        <p>Developed by <span class="text-accent">Amin Baranzehi</span></p>
+    <footer class="mt-auto py-4 sm:py-6 text-center text-gray-500 text-xs sm:text-sm border-t border-gray-800/80 bg-panel">
+        <p>Developed by <a href="https://github.com/amin-baranzehi" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline font-medium">Amin Baranzehi</a></p>
     </footer>
 
     <script>
@@ -75,3 +97,4 @@
     </script>
 </body>
 </html>
+
