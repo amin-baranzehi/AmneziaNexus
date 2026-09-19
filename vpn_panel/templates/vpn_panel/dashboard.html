@@ -20,31 +20,31 @@
     <!-- Top Navbar -->
     <nav class="bg-panel border-b border-gray-700/80 shadow-sm sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-14 sm:h-16">
+            <div class="flex items-center justify-between h-14 sm:h-16 gap-2">
                 <!-- Left: Brand & Status -->
-                <div class="flex items-center space-x-2 sm:space-x-4">
-                    <a href="{% url 'vpn_panel:dashboard' %}" class="flex items-center gap-2 sm:gap-2.5 text-lg sm:text-2xl font-bold text-accent tracking-wider hover:opacity-90 transition">
-                        <img src="{% static 'vpn_panel/icons/app_icon.png' %}" alt="Logo" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg object-contain shadow-sm">
-                        <span>AmneziaNexus</span>
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <a href="{% url 'vpn_panel:dashboard' %}" class="flex items-center gap-1.5 sm:gap-2.5 text-base sm:text-xl font-bold text-accent tracking-wide hover:opacity-90 transition flex-shrink-0">
+                        <img src="{% static 'vpn_panel/icons/app_icon.png' %}" alt="Logo" class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-lg object-contain shadow-sm">
+                        <span class="truncate">AmneziaNexus</span>
                     </a>
-                    <div class="flex items-center">
-                        <span class="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium {% if is_system_connected %}bg-emerald-950/70 text-emerald-400 border border-emerald-700/70{% else %}bg-gray-800/80 text-gray-400 border border-gray-700{% endif %}">
-                            <span class="w-1.5 h-1.5 rounded-full {% if is_system_connected %}bg-emerald-400 animate-pulse{% else %}bg-gray-500{% endif %} mr-1.5"></span>
-                            <span>{% if is_system_connected %}Running{% else %}Stopped{% endif %}</span>
+                    <div class="flex items-center flex-shrink-0">
+                        <span class="inline-flex items-center px-1.5 sm:px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-medium {% if is_system_connected %}bg-emerald-950/70 text-emerald-400 border border-emerald-700/70{% else %}bg-gray-800/80 text-gray-400 border border-gray-700{% endif %}" title="{% if is_system_connected %}System is Running{% else %}System is Stopped{% endif %}">
+                            <span class="w-1.5 h-1.5 rounded-full {% if is_system_connected %}bg-emerald-400 animate-pulse{% else %}bg-gray-500{% endif %} sm:mr-1.5"></span>
+                            <span class="hidden xs:inline">{% if is_system_connected %}Running{% else %}Stopped{% endif %}</span>
                         </span>
                     </div>
                 </div>
 
                 <!-- Right: Navigation actions -->
-                <div class="flex items-center space-x-2 sm:space-x-3">
-                    <a href="{% url 'vpn_panel:logs' %}" class="inline-flex items-center px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-gray-800/90 hover:bg-gray-700 text-gray-300 text-xs sm:text-sm font-medium rounded-lg transition duration-150 border border-gray-700" title="System Logs">
-                        <svg class="w-4 h-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <div class="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+                    <a href="{% url 'vpn_panel:logs' %}" class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-gray-800/90 hover:bg-gray-700 text-gray-300 text-xs sm:text-sm font-medium rounded-lg transition duration-150 border border-gray-700" title="System Logs">
+                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         <span class="hidden sm:inline">Logs</span>
                     </a>
                     <form action="{% url 'logout' %}" method="post" class="inline">
                         {% csrf_token %}
-                        <button type="submit" class="inline-flex items-center px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-gray-800/90 hover:bg-gray-700 text-gray-300 text-xs sm:text-sm font-medium rounded-lg transition duration-150 border border-gray-700" title="Sign Out">
-                            <svg class="w-4 h-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        <button type="submit" class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-gray-800/90 hover:bg-gray-700 text-gray-300 text-xs sm:text-sm font-medium rounded-lg transition duration-150 border border-gray-700" title="Sign Out">
+                            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                             <span class="hidden sm:inline">Logout</span>
                         </button>
                     </form>
